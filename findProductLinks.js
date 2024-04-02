@@ -60,6 +60,36 @@ function shuffleArray(array) {
 }
 
 
+// ============================================ getBrowser
+const getBrowser = async (proxyServer, headless = true, withProxy = true) => {
+    try {
+        const args = (withProxy) => {
+            if (withProxy == true) {
+                console.log("terue");
+                return ["--no-sandbox", "--disable-setuid-sandbox", `--proxy-server=${proxyServer}`]
+            }
+            else {
+                return ["--no-sandbox", "--disable-setuid-sandbox"]
+            }
+        }
+        // Lunch Browser
+        const browser = await puppeteer.launch({
+            headless: headless, // Set to true for headless mode, false for non-headless
+            executablePath:
+                process.env.NODE_ENV === "production"
+                        ? process.env.PUPPETEER_EXECUTABLE_PATH
+                    : puppeteer.executablePath(),
+            args: args(withProxy),
+            protocolTimeout: 6000000
+        });     
+
+        return browser;
+    }
+    catch (error) {
+        console.log("Error in getBrowserWithProxy function", error);
+    }
+}
+
 // ============================================ login
 // async function login(page, url ,userOrPhone, pass) {
 //      try {
@@ -159,15 +189,8 @@ async function findAllProductsLinks(page, url, brandName) {
 async function main() {
     try {
         // Lunch Browser
-        const browser = await puppeteer.launch({
-            headless: true, // Set to true for headless mode, false for non-headless
-            executablePath:
-                process.env.NODE_ENV === "production"
-                        ? process.env.PUPPETEER_EXECUTABLE_PATH
-                        : puppeteer.executablePath(),
-            args: ["--no-sandbox", "--disable-setuid-sandbox"],
-            protocolTimeout: 6000000
-        });
+        const proxy = 'ss://YWVzLTI1Ni1nY206d0dVaGt6WGpjRA==@38.54.13.15:31214#main'
+        const browser = getBrowser(proxy, true, true);
 
         const page = await browser.newPage();
         await page.setViewport({
