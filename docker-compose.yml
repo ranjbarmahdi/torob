@@ -1,0 +1,42 @@
+version: '3.7'
+
+services:
+  node-app-1:
+    user: root
+    restart: always
+    build:
+      context: .
+    ports:
+      - "4011:4008"
+    volumes:
+      - ./torob:/usr/src/app/torob
+    networks:
+      - custom_network
+  
+  node-app-2:
+    user: root
+    restart: always
+    build:
+      context: .
+    ports:
+      - "4012:4008"
+    volumes:
+      - ./torob:/usr/src/app/torob
+    networks:
+      - custom_network
+
+  node-app-3:
+    user: root
+    restart: always
+    build:
+      context: .
+    ports:
+      - "4013:4008"
+    volumes:
+      - ./torob:/usr/src/app/torob
+    networks:
+      - custom_network
+      
+networks:
+  custom_network:
+    external: true
