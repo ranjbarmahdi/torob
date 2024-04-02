@@ -190,7 +190,7 @@ async function main() {
     try {
         // Lunch Browser
         const proxy = 'ss://YWVzLTI1Ni1nY206d0dVaGt6WGpjRA==@38.54.13.15:31214#main'
-        const browser = getBrowser(proxy, true, true);
+        const browser = await getBrowser(proxy, true, true);
 
         const page = await browser.newPage();
         await page.setViewport({
