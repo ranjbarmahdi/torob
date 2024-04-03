@@ -187,29 +187,45 @@ async function findAllProductsLinks(page, url, brandName) {
 
 // ============================================ Main
 async function main() {
-    try {
-        // Lunch Browser
-        const proxy = 'ss://YWVzLTI1Ni1nY206d0dVaGt6WGpjRA==@38.54.13.15:31214#main'
-        const browser = await getBrowser(proxy, true, true);
-
-        const page = await browser.newPage();
-        await page.setViewport({
-            width: 1920,
-            height: 1080,
-        });
+    return new Promise(async(res, rej) => {
+        try {
+            // Lunch Browser
+            const proxy = 'ss://YWVzLTI1Ni1nY206d0dVaGt6WGpjRA==@38.54.13.15:31214#main'
+            const browser = await getBrowser(proxy, true, false);
     
-        const urlRow = await removeUrl();
-        if (urlRow) {
-            await findAllProductsLinks(page, urlRow.url, urlRow.brand);
-        }
+            const page = await browser.newPage();
+            await page.setViewport({
+                width: 1920,
+                height: 1080,
+            });
         
-    // Close page and browser
-    console.log("End");
-    await page.close();
-    await browser.close();
-    } catch (error) {
-        console.log("Error In main Function", error);
+            const urlRow = await removeUrl();
+            if (urlRow) {
+                await findAllProductsLinks(page, urlRow.url, urlRow.brand);
+            }
+            
+            // Close page and browser
+            console.log("End");
+            await page.close();
+                await browser.close();
+                res("Tamam")
+        } catch (error) {
+            console.log("Error In main Function", error);
+            rej("Error")
+        }
+
+    })
+}
+
+async function w() {
+    while (true) {
+        await main();
+    
+        console.log("================ sleep in while");
+        await delay(5000)
+        console.log("================ start while");
+    
     }
 }
 
-main();
+w();
